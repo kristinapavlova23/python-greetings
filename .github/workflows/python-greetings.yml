@@ -54,7 +54,7 @@ jobs:
       - uses: ./.github/actions/deploy
         with:
           environment: 'prd'
-  api-tests-dev:
+  api-tests-prd:
     runs-on: ubuntu-latest
     needs: [deploy-prd]
     steps:
