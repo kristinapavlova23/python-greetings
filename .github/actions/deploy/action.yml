@@ -15,9 +15,9 @@ runs:
     # - name: Stop previous container
     #   run: docker-compose stop python-greetings-app-${{ inputs.environment }}
     #   shell: bash
-    - name: Remove stopped container
-      run: docker-compose rm python-greetings-app-${{ inputs.environment }}
-      shell: bash
+    # - name: Remove stopped container
+    #   run: docker-compose rm python-greetings-app-${{ inputs.environment }}
+    #   shell: bash
     - name: Run new container
       run: docker-compose up -d python-greetings-app-${{ inputs.environment }}
       shell: bash
