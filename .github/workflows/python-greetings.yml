@@ -1,13 +1,10 @@
 # This is a basic workflow to help you get started with Actions
 
 name: Python Greetings workflow
-
-# Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -18,30 +15,49 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-         
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Build package
-        run: python app.py -m build
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+      - uses: ./.github/actions/build
+  deploy-dev:
+    runs-on: ubuntu-latest
+    needs: [build-docker-image]
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      - uses: ./.github/actions/deploy
+        with:
+          environment: 'dev'
+  api-tests-dev:
+    runs-on: ubuntu-latest
+    needs: [deploy-dev]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Step
+        run: echo "Api tests on DEV"
+  deploy-stg:
+    runs-on: ubuntu-latest
+    needs: [api-tests-dev]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/deploy
+        with:
+          environment: 'stg'
+  api-tests-stg:
+    runs-on: ubuntu-latest
+    needs: [deploy-stg]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Step
+        run: echo "Api tests on STG"
+  deploy-prd:
+    runs-on: ubuntu-latest
+    needs: [api-tests-stg]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/deploy
+        with:
+          environment: 'prd'
+  api-tests-dev:
+    runs-on: ubuntu-latest
+    needs: [deploy-prd]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Step
+        run: echo "Api tests on PRD"
