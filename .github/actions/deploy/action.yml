@@ -12,9 +12,9 @@ runs:
     - name: Pull the latest app from Dockerhub
       run: docker pull kristinapavlova/python-greetings-app:latest
       shell: bash
-    - name: Stop previous container
-      run: docker-compose stop python-greetings-app-${{ inputs.environment }}
-      shell: bash
+    # - name: Stop previous container
+    #   run: docker-compose stop python-greetings-app-${{ inputs.environment }}
+    #   shell: bash
     - name: Remove stopped container
       run: docker-compose rm python-greetings-app-${{ inputs.environment }}
       shell: bash
