@@ -12,7 +12,7 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build-docker-image:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,7 +30,7 @@ jobs:
           tags: |
             kristinapavlova/python-greetings-app:latest
   deploy-dev:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [build-docker-image]
     steps:
       - uses: actions/checkout@v4
@@ -38,14 +38,14 @@ jobs:
         with:
           environment: 'dev'
   api-tests-dev:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [deploy-dev]
     steps:
       - uses: actions/checkout@v4
       - name: Step
         run: echo "Api tests on DEV"
   deploy-stg:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [api-tests-dev]
     steps:
       - uses: actions/checkout@v4
@@ -53,14 +53,14 @@ jobs:
         with:
           environment: 'stg'
   api-tests-stg:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [deploy-stg]
     steps:
       - uses: actions/checkout@v4
       - name: Step
         run: echo "Api tests on STG"
   deploy-prd:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [api-tests-stg]
     steps:
       - uses: actions/checkout@v4
@@ -68,7 +68,7 @@ jobs:
         with:
           environment: 'prd'
   api-tests-prd:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [deploy-prd]
     steps:
       - uses: actions/checkout@v4
