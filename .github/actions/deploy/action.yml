@@ -7,7 +7,10 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: echo "Deployment triggered on ${{ inputs.environment }} environment"
+    - run: echo "Deploying Python app to ${{ inputs.environment }} environment"
+      shell: bash
+    - name: Pull the latest app from Dockerhub
+      run: docker pull kristinapavlova/python-greetings-app:latest
       shell: bash
     - name: Stop previous container
       run: docker-compose stop python-greetings-app-${{ inputs.environment }}
