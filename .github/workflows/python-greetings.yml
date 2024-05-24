@@ -29,7 +29,7 @@ jobs:
           push: true
           tags: |
             kristinapavlova/python-greetings-app:latest
-  deploy-dev:
+  deploy-to-dev:
     runs-on: self-hosted
     needs: [build-docker-image]
     steps:
@@ -37,40 +37,40 @@ jobs:
       - uses: ./.github/actions/deploy
         with:
           environment: 'dev'
-  api-tests-dev:
+  tests-on-dev:
     runs-on: self-hosted
-    needs: [deploy-dev]
+    needs: [deploy-to-dev]
     steps:
       - uses: actions/checkout@v4
       - name: Step
         run: echo "Api tests on DEV"
-  deploy-stg:
+  deploy-to-stg:
     runs-on: self-hosted
-    needs: [api-tests-dev]
+    needs: [tests-on-dev]
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/deploy
         with:
           environment: 'stg'
-  api-tests-stg:
+  tests-on-stg:
     runs-on: self-hosted
-    needs: [deploy-stg]
+    needs: [deploy-to-stg]
     steps:
       - uses: actions/checkout@v4
       - name: Step
         run: echo "Api tests on STG"
-  deploy-prd:
+  deploy-to-prod:
     runs-on: self-hosted
-    needs: [api-tests-stg]
+    needs: [tests-on-stg]
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/deploy
         with:
-          environment: 'prd'
-  api-tests-prd:
+          environment: 'prod'
+  tests-on-prod:
     runs-on: self-hosted
-    needs: [deploy-prd]
+    needs: [deploy-to-prod]
     steps:
       - uses: actions/checkout@v4
       - name: Step
-        run: echo "Api tests on PRD"
+        run: echo "Api tests on prod"

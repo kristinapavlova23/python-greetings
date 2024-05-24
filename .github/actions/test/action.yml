@@ -9,6 +9,9 @@ runs:
   steps:
     - run: echo "API tests triggered on ${{ inputs.environment }} environment"
       shell: bash
+    - name: Pull the latest api-tests from Dockerhub
+      run: docker pull kristinapavlova/api-tests:latest
+      shell: bash
     - name: Run API Tests
-      run: docker run --network=host --rm kristinapavlova/api-tests python-greetings-app-${{ inputs.environment }}
+      run: docker run --network=host --rm kristinapavlova/api-tests:latest run python-greetings-app-${{ inputs.environment }}
       shell: bash
