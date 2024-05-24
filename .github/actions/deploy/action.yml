@@ -1,0 +1,20 @@
+name: 'Deploy Python greeting app'
+description: 'Action to deploy Python greeting app'
+inputs: 
+  environment:
+    description: 'Environment to deploy Python greeting app'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - run: echo "Deployment triggered on ${{ inputs.environment }} environment"
+      shell: bash
+    - name: Stop previous container
+      run: docker-compose stop python-greetings-app-${{ inputs.environment }}
+      shell: bash
+    - name: Remove stopped container
+      run: docker-compose rm python-greetings-app-${{ inputs.environment }}
+      shell: bash
+    - name: Run new container
+      run: docker-compose up -d python-greetings-app-${{ inputs.environment }}
+      shell: bash
